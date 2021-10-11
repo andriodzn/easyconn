@@ -1,0 +1,94 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 29
+        versionCode 1
+        versionName "0.1"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    testImplementation 'junit:junit:4.+'
+    testImplementation 'org.mockito:mockito-core:3.+'
+
+    androidTestImplementation 'org.mockito:mockito-android:3.+'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+
+
+// ------------------------------
+// publish configuration
+// ------------------------------
+
+
+apply plugin: 'maven-publish' // Apply this plugin at the top of your library build.gradle
+
+def githubProperties = new Properties()
+
+try{
+    githubProperties.load(new FileInputStream(rootProject.file("github.properties"))) //Set env variable GPR_USER & GPR_API_KEY if not adding a properties file
+}
+catch (IOException ignored) {
+    System.out.println('can not load github.properties: ' + ignored.toString())
+//    ignored.printStackTrace()
+}
+
+def getArtificatId = { ->
+    return "easyconn" // Replace with library name ID
+}
+
+def getVersionName = { ->
+    return android.defaultConfig.versionName
+}
+
+publishing {
+    publications {
+        bar(MavenPublication) {
+            groupId 'org.androidzn' // Replace with group ID
+            artifactId getArtificatId()
+            version getVersionName()
+            artifact("$buildDir/outputs/aar/${getArtificatId()}-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            /** Configure path of your package repository on Github
+             ** Replace GITHUB_USERID with your/organisation Github userID
+             ** and REPOSITORY with the repository name on GitHub
+             */
+            url = uri("https://maven.pkg.github.com/andriodzn/easyconn")
+            credentials {
+                /** Create github.properties in root project folder file with
+                 ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN
+                 ** Set env variable GPR_USER & GPR_API_KEY if not adding a properties file**/
+                username = githubProperties['gpr.usr'] ?: System.getenv("GITHUB_USERNAME")
+                password = githubProperties['gpr.key'] ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}

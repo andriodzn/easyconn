@@ -1,0 +1,2 @@
+include ':easyconn'
+rootProject.name = "easy.connection"
