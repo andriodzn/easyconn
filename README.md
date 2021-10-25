@@ -1,5 +1,5 @@
 # EasyConn 
-[![Android CI](https://github.com/andriodzn/easyconn/actions/workflows/android-build.yml/badge.svg?branch=main)](https://github.com/andriodzn/easyconn/actions/workflows/android-build.yml)
+[![Android CI](https://github.com/andriodzn/easyconn/actions/workflows/android-build.yml/badge.svg?branch=main)](https://github.com/andriodzn/easyconn/actions/workflows/android-build.yml) [![](https://jitpack.io/v/andriodzn/easyconn.svg)](https://jitpack.io/#andriodzn/easyconn)
 
 Android 服务连接工具
 
